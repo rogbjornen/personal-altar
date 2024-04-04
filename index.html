@@ -101,19 +101,19 @@ document.addEventListener("DOMContentLoaded", function() {
     const overlay = document.getElementById('overlay');
     const sceneEl = document.querySelector('a-scene');
     playAudioButton.addEventListener('click', function() {
-        overlay.style.display = 'none'; // Скрываем заглушку
-        sceneEl.style.display = 'block'; // Показываем A-Frame сцену
-        // Здесь можно добавить код для активации звука, если это необходимо
-        // Активация камеры (AR-сцены)
-        sceneEl.setAttribute('autostart', 'true');
-        document.querySelectorAll('audio').forEach(audio => {
-            audio.play().then(() => {
-                audio.pause(); // Сразу же останавливаем воспроизведение
-                audio.currentTime = 0; // Сбрасываем время аудио
-            }).catch(error => console.error("Ошибка воспроизведения аудио:", error));
+        // Воспроизведение пустого аудиофайла для разблокировки аудио на iOS и других платформах
+        const unlockAudio = document.getElementById('activate');
+        unlockAudio.play().then(() => {
+            console.log("Аудио разблокировано");
+            overlay.style.display = 'none'; // Скрываем заглушку
+            sceneEl.style.display = 'block'; // Показываем A-Frame сцену
+            // Теперь, когда аудио разблокировано, все последующие воспроизведения аудио должны работать нормально
+        }).catch(error => {
+            console.error("Ошибка разблокировки аудио:", error);
         });
+
+        // Дополнительно, если необходимо, активируйте камеру или другие элементы AR здесь
     });
-});
 
 
       document.addEventListener("DOMContentLoaded", function() {
