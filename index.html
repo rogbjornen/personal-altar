@@ -33,7 +33,7 @@
 
   </head>
   <body>
-
+    <audio id="audioPlayer"></audio>
     <div id="overlay">
       <button id="playAudioButton">Включить звук</button>
   </div>
@@ -53,15 +53,6 @@
         <img id="quartz" src="assets/quartz.png" />
         <img id="seashell" src="assets/seashell.png" />
         <img id="swallow" src="assets/swallow.png" />
-        <audio id="audio_palo_santo" src="assets/sound/palo_santo.mp3"></audio>
-        <audio id="audio_swallow" src="assets/sound/swallow.mp3"></audio>
-        <audio id="audio_oak_leaf" src="assets/sound/oak_leaf.mp3"></audio>
-        <audio id="audio_quartz" src="assets/sound/quartz.mp3"></audio>
-        <audio id="audio_seashell" src="assets/sound/seashell.mp3"></audio>
-        <audio id="audio_hamsa" src="assets/sound/hamsa.mp3"></audio>
-        <audio id="audio_coral" src="assets/sound/coral.mp3"></audio>
-        <audio id="audio_cypress_cone" src="assets/sound/cypress_cone.mp3"></audio>
-        <audio id="activate" src="assets/sound/activate.mp3"></audio>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -98,59 +89,46 @@
       document.addEventListener("DOMContentLoaded", function() {
         const overlay = document.getElementById('overlay');
         const playAudioButton = document.getElementById('playAudioButton');
-        const sceneEl = document.querySelector('a-scene');
-        const activationAudio = document.getElementById('activate'); // Специальный аудио для активации
+        const audioPlayer = document.getElementById('audioPlayer'); // Элемент аудиоплеера
         
-        let audioActivated = false; // Флаг для проверки, было ли активировано аудио
-      
-        // Функция для активации аудио на iOS
-        function activateAudio() {
-          if (!audioActivated) {
-            activationAudio.play().then(() => {
-              activationAudio.pause();
-              activationAudio.currentTime = 0;
-              audioActivated = true; // Устанавливаем флаг активации аудио
-            }).catch(error => console.error("Ошибка активации аудио:", error));
-          }
-        }
-      
-        // Обработка нажатия на кнопку "Запустить проект"
         playAudioButton.addEventListener('click', function() {
-          overlay.style.display = 'none'; // Скрываем заглушку и кнопку
-          activateAudio(); // Попытка активировать аудио
+          overlay.style.display = 'none'; // Скрываем заглушку
+          // Нет необходимости воспроизводить звук здесь, так как мы активируем аудио позже
         });
       
-        // Обработчики для каждой AR-цели
+        // Сопоставление индексов целей с файлами аудио
         const targetAudioMap = {
-          "audio_coral": "coral",
-          "audio_cypress_cone": "cypress_cone",
-          "audio_hamsa": "hamsa",
-          "audio_oak_leaf": "oak_leaf",
-          "audio_palo_santo": "palo_santo",
-          "audio_quartz": "quartz",
-          "audio_seashell": "seashell",
-          "audio_swallow": "swallow"
+          "0": "assets/sound/palo_santo.mp3",
+          "1": "assets/sound/swallow.mp3",
+          "2": "assets/sound/oak_leaf.mp3",
+          "3": "assets/sound/quartz.mp3",
+          "4": "assets/sound/seashell.mp3",
+          "5": "assets/sound/hamsa.mp3",
+          "6": "assets/sound/coral.mp3",
+          "7": "assets/sound/cypress_cone.mp3"
         };
       
-        Object.keys(targetAudioMap).forEach((audioId, index) => {
+        const sceneEl = document.querySelector('a-scene');
+        
+        Object.keys(targetAudioMap).forEach(index => {
           const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
           
-          if (targetEntity) {
-            // Обнаружение цели
+          if(targetEntity) {
             targetEntity.addEventListener("targetFound", () => {
-              if (audioActivated) { // Воспроизводим аудио только если оно было активировано
-                document.getElementById(audioId).play().catch(error => console.log(`Ошибка воспроизведения ${audioId}:`, error));
-              }
+              audioPlayer.src = targetAudioMap[index]; // Установка нужного источника
+              audioPlayer.play() // Воспроизведение аудио
+                .catch(error => console.error(`Ошибка воспроизведения для цели ${index}:`, error));
             });
       
-            // Потеря цели
             targetEntity.addEventListener("targetLost", () => {
-              document.getElementById(audioId).pause();
+              audioPlayer.pause(); // Останавливаем воспроизведение при потере цели
+              audioPlayer.currentTime = 0; // Сброс времени аудио
             });
           }
         });
       });
       </script>
+      
       
 
   </body>
