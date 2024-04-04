@@ -4,60 +4,6 @@
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.4/dist/mindar-image.prod.js"></script>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.4/dist/mindar-image-aframe.prod.js"></script>
-  </head>
-  <body>
-    <a-scene 
-    mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.001;"    
-    color-space="sRGB" 
-    renderer="colorManagement: true, physicallyCorrectLights" 
-    vr-mode-ui="enabled: false" 
-    device-orientation-permission-ui="enabled: false">
-      <a-assets>
-        <img id="palo_santo" src="assets/palo_santo.png" />
-        <img id="swallow" src="assets/swallow.png" />
-        <img id="oak_leaf" src="assets/oak_leaf.png" />
-        <img id="quartz" src="assets/quartz.png" />
-        <img id="seashell" src="assets/seashell.png" />
-        <img id="hamsa" src="assets/hamsa.png" />
-        <img id="coral" src="assets/coral.png" />
-        <img id="cypress_cone" src="assets/cypress_cone.png" />
-        <audio id="audio_palo_santo" src="assets/sound/palo_santo.mp3"></audio>
-        <audio id="audio_swallow" src="assets/sound/swallow.mp3"></audio>
-        <audio id="audio_oak_leaf" src="assets/sound/oak_leaf.mp3"></audio>
-        <audio id="audio_quartz" src="assets/sound/quartz.mp3"></audio>
-        <audio id="audio_seashell" src="assets/sound/seashell.mp3"></audio>
-        <audio id="audio_hamsa" src="assets/sound/hamsa.mp3"></audio>
-        <audio id="audio_coral" src="assets/sound/coral.mp3"></audio>
-        <audio id="audio_cypress_cone" src="assets/sound/cypress_cone.mp3"></audio>
-      </a-assets>
-
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-      <a-entity mindar-image-target="targetIndex: 0">
-        <a-image 
-        src="#palo_santo" width="0.57" height="0.76" position="0 0 0" rotation="0 0 0"></a-image>
-      </a-entity>
-      <a-entity mindar-image-target="targetIndex: 1">
-        <a-image src="#swallow" width="0.57" height="0.76" position="0 0 0" rotation="0 0 0"></a-image>
-      </a-entity>
-      <a-entity mindar-image-target="targetIndex: 2">
-        <a-image src="#oak_leaf" width="0.57" height="0.76" position="0 0 0" rotation="0 0 0"></a-image>
-      </a-entity>
-      <a-entity mindar-image-target="targetIndex: 3">
-        <a-image src="#quartz" width="0.57" height="0.76" position="0 0 0" rotation="0 0 0"></a-image>
-      </a-entity>
-      <a-entity mindar-image-target="targetIndex: 4">
-        <a-image src="#seashell" width="0.57" height="0.76" position="0 0 0" rotation="0 0 0"></a-image>
-      </a-entity>
-      <a-entity mindar-image-target="targetIndex: 5">
-        <a-image src="#hamsa" width="0.57" height="0.76" position="0 0 0" rotation="0 0 0"></a-image>
-      </a-entity>
-      <a-entity mindar-image-target="targetIndex: 6">
-        <a-image src="#coral" width="0.57" height="0.76" position="0 0 0" rotation="0 0 0"></a-image>
-      </a-entity>
-      <a-entity mindar-image-target="targetIndex: 7">
-        <a-image src="#cypress_cone" width="0.57" height="0.76" position="0 0 0" rotation="0 0 0"></a-image>
-      </a-entity>
-    </a-scene>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -103,8 +49,60 @@
         });
       });
     </script>
-    
-    
 
+  </head>
+  <body>
+    <a-scene 
+    mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.01;"    
+    color-space="sRGB" 
+    renderer="colorManagement: true, physicallyCorrectLights" 
+    vr-mode-ui="enabled: false" 
+    device-orientation-permission-ui="enabled: false">
+      <a-assets>
+        <img id="palo_santo" src="assets/palo_santo.png" />
+        <img id="swallow" src="assets/swallow.png" />
+        <img id="oak_leaf" src="assets/oak_leaf.png" />
+        <img id="quartz" src="assets/quartz.png" />
+        <img id="seashell" src="assets/seashell.png" />
+        <img id="hamsa" src="assets/hamsa.png" />
+        <img id="coral" src="assets/coral.png" />
+        <img id="cypress_cone" src="assets/cypress_cone.png" />
+        <audio id="audio_palo_santo" src="assets/sound/palo_santo.mp3"></audio>
+        <audio id="audio_swallow" src="assets/sound/swallow.mp3"></audio>
+        <audio id="audio_oak_leaf" src="assets/sound/oak_leaf.mp3"></audio>
+        <audio id="audio_quartz" src="assets/sound/quartz.mp3"></audio>
+        <audio id="audio_seashell" src="assets/sound/seashell.mp3"></audio>
+        <audio id="audio_hamsa" src="assets/sound/hamsa.mp3"></audio>
+        <audio id="audio_coral" src="assets/sound/coral.mp3"></audio>
+        <audio id="audio_cypress_cone" src="assets/sound/cypress_cone.mp3"></audio>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-image 
+        src="#palo_santo" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 1">
+        <a-image src="#swallow" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 2">
+        <a-image src="#oak_leaf" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 3">
+        <a-image src="#quartz" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 4">
+        <a-image src="#seashell" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 5">
+        <a-image src="#hamsa" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 6">
+        <a-image src="#coral" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 7">
+        <a-image src="#cypress_cone" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+    </a-scene>
   </body>
 </html>
