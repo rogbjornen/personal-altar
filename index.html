@@ -12,7 +12,7 @@
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0, 0, 0, 0.8);
+          background: rgba(8, 0, 78, 0.1);
           z-index: 1000;
           display: flex;
           justify-content: center;
@@ -23,8 +23,8 @@
           padding: 10px 20px;
           font-size: 20px;
           cursor: pointer;
-          background-color: #007bff;
-          color: white;
+          background-color: #ffffff;
+          color: rgb(9, 20, 72);
           border: none;
           border-radius: 5px;
           box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -35,7 +35,7 @@
   <body>
 
     <div id="overlay">
-      <button id="playAudioButton">Запустить проект</button>
+      <button id="playAudioButton">Включить звук</button>
   </div>
 
     <a-scene 
@@ -95,48 +95,63 @@
     
 
     <script>
-document.addEventListener("DOMContentLoaded", function() {
-  const playAudioButton = document.getElementById('playAudioButton');
-  const overlay = document.getElementById('overlay');
-  const sceneEl = document.querySelector('a-scene');
-  
-  playAudioButton.addEventListener('click', function() {
-      overlay.style.display = 'none'; // Скрываем заглушку
-      sceneEl.style.display = 'block'; // Показываем A-Frame сцену
+      document.addEventListener("DOMContentLoaded", function() {
+        const overlay = document.getElementById('overlay');
+        const playAudioButton = document.getElementById('playAudioButton');
+        const sceneEl = document.querySelector('a-scene');
+        const activationAudio = document.getElementById('activate'); // Специальный аудио для активации
+        
+        let audioActivated = false; // Флаг для проверки, было ли активировано аудио
       
-      // Запускаем воспроизведение фонового аудио для активации аудио-сессии на iOS
-      document.getElementById('activate').play().then(() => {
-        document.getElementById('activate').pause();
-      }).catch(error => console.error("Ошибка воспроизведения аудио:", error));
-  });
-
-  const targetAudioMap = [
-    "audio_coral",
-    "audio_cypress_cone",
-    "audio_hamsa",
-    "audio_oak_leaf",
-    "audio_palo_santo",
-    "audio_quartz",
-    "audio_seashell",
-    "audio_swallow"
-  ];
-
-  targetAudioMap.forEach((audioId, index) => {
-    const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
-    targetEntity.addEventListener("targetFound", event => {
-      document.querySelectorAll('audio').forEach(audio => {
-        if (audio.id === audioId) {
-          audio.play().catch(error => console.log(`Ошибка воспроизведения ${audioId}:`, error));
+        // Функция для активации аудио на iOS
+        function activateAudio() {
+          if (!audioActivated) {
+            activationAudio.play().then(() => {
+              activationAudio.pause();
+              activationAudio.currentTime = 0;
+              audioActivated = true; // Устанавливаем флаг активации аудио
+            }).catch(error => console.error("Ошибка активации аудио:", error));
+          }
         }
+      
+        // Обработка нажатия на кнопку "Запустить проект"
+        playAudioButton.addEventListener('click', function() {
+          overlay.style.display = 'none'; // Скрываем заглушку и кнопку
+          activateAudio(); // Попытка активировать аудио
+        });
+      
+        // Обработчики для каждой AR-цели
+        const targetAudioMap = {
+          "audio_coral": "coral",
+          "audio_cypress_cone": "cypress_cone",
+          "audio_hamsa": "hamsa",
+          "audio_oak_leaf": "oak_leaf",
+          "audio_palo_santo": "palo_santo",
+          "audio_quartz": "quartz",
+          "audio_seashell": "seashell",
+          "audio_swallow": "swallow"
+        };
+      
+        Object.keys(targetAudioMap).forEach((audioId, index) => {
+          const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
+          
+          if (targetEntity) {
+            // Обнаружение цели
+            targetEntity.addEventListener("targetFound", () => {
+              if (audioActivated) { // Воспроизводим аудио только если оно было активировано
+                document.getElementById(audioId).play().catch(error => console.log(`Ошибка воспроизведения ${audioId}:`, error));
+              }
+            });
+      
+            // Потеря цели
+            targetEntity.addEventListener("targetLost", () => {
+              document.getElementById(audioId).pause();
+            });
+          }
+        });
       });
-    });
-    targetEntity.addEventListener("targetLost", event => {
-      document.getElementById(audioId).pause(); // Останавливаем воспроизведение при потере цели
-    });
-  });
-});
-
       </script>
+      
 
   </body>
 </html>
