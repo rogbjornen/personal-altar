@@ -86,11 +86,13 @@
     
 
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener("DOMContentLoaded", async function() {
         const overlay = document.getElementById('overlay');
         const playButton = document.getElementById('playAudioButton');
+        const scene = document.querySelector('a-scene');
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let audioBuffers = {}; // Сохраняем буферы для быстрого доступа
+        let audioBuffers = {};
+        let sources = {};
         const audioFiles = {
           "0": "assets/sound/coral.mp3",
           "1": "assets/sound/cypress_cone.mp3",
@@ -102,33 +104,51 @@
           "7": "assets/sound/swallow.mp3"
         };
       
-        // Предварительная загрузка аудиофайлов и сохранение их в буферах
-        async function preloadAudio() {
-          const promises = Object.entries(audioFiles).map(async ([index, path]) => {
-            const response = await fetch(path);
+        // Функция для предварительной загрузки аудиофайлов
+        async function preloadAudioFiles() {
+          const fileLoadPromises = Object.entries(audioFiles).map(async ([index, filePath]) => {
+            const response = await fetch(filePath);
             const arrayBuffer = await response.arrayBuffer();
             audioBuffers[index] = await audioContext.decodeAudioData(arrayBuffer);
           });
-          await Promise.all(promises);
+          await Promise.all(fileLoadPromises);
         }
       
-        async function playAudio(index) {
-          if (audioBuffers[index]) {
+        // Функция воспроизведения аудио для заданной цели
+        function playAudio(index) {
+          if (audioBuffers[index] && !sources[index]) {
             const source = audioContext.createBufferSource();
             source.buffer = audioBuffers[index];
             source.connect(audioContext.destination);
+            source.loop = true;
             source.start(0);
+            sources[index] = source;
+          }
+        }
+      
+        // Функция остановки аудио для заданной цели
+        function stopAudio(index) {
+          if (sources[index]) {
+            sources[index].stop();
+            delete sources[index];
           }
         }
       
         playButton.addEventListener('click', async () => {
           overlay.style.display = 'none';
-          document.querySelector('a-scene').style.display = 'block';
-          await audioContext.resume(); // Разблокировка AudioContext
-          await preloadAudio(); // Предварительная загрузка аудиофайлов
+          scene.style.display = 'block';
+          await audioContext.resume();
+          await preloadAudioFiles();
         });
       
-        // Добавьте здесь логику взаимодействия с AR-сценой и воспроизведение соответствующих аудио
+        // Добавляем обработчики событий для AR-целей
+        scene.addEventListener('targetFound', (e) => {
+          playAudio(e.detail.name);
+        });
+      
+        scene.addEventListener('targetLost', (e) => {
+          stopAudio(e.detail.name);
+        });
       });
       </script>
       
