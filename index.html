@@ -53,20 +53,20 @@
   </head>
   <body>
     <a-scene 
-    mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.01;"    
+    mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.00001; filterBeta: 0.01;"    
     color-space="sRGB" 
     renderer="colorManagement: true, physicallyCorrectLights" 
     vr-mode-ui="enabled: false" 
     device-orientation-permission-ui="enabled: false">
       <a-assets>
-        <img id="palo_santo" src="assets/palo_santo.png" />
-        <img id="swallow" src="assets/swallow.png" />
-        <img id="oak_leaf" src="assets/oak_leaf.png" />
-        <img id="quartz" src="assets/quartz.png" />
-        <img id="seashell" src="assets/seashell.png" />
-        <img id="hamsa" src="assets/hamsa.png" />
         <img id="coral" src="assets/coral.png" />
         <img id="cypress_cone" src="assets/cypress_cone.png" />
+        <img id="hamsa" src="assets/hamsa.png" />
+        <img id="oak_leaf" src="assets/oak_leaf.png" />
+        <img id="palo_santo" src="assets/palo_santo.png" />
+        <img id="quartz" src="assets/quartz.png" />
+        <img id="seashell" src="assets/seashell.png" />
+        <img id="swallow" src="assets/swallow.png" />
         <audio id="audio_palo_santo" src="assets/sound/palo_santo.mp3"></audio>
         <audio id="audio_swallow" src="assets/sound/swallow.mp3"></audio>
         <audio id="audio_oak_leaf" src="assets/sound/oak_leaf.mp3"></audio>
@@ -80,28 +80,28 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
         <a-image 
-        src="#oak_leaf" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+        src="#coral" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
       <a-entity mindar-image-target="targetIndex: 1">
-        <a-image src="#swallow" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+        <a-image src="#cypress_cone" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
       <a-entity mindar-image-target="targetIndex: 2">
-        <a-image src="#oak_leaf" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+        <a-image src="#hamsa" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
       <a-entity mindar-image-target="targetIndex: 3"> 
-        <a-image src="#coral" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+        <a-image src="#oak_leaf" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
       <a-entity mindar-image-target="targetIndex: 4">
-        <a-image src="#seashell" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+        <a-image src="#palo_santo" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
       <a-entity mindar-image-target="targetIndex: 5">
-        <a-image src="#swallow" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+        <a-image src="#quartz" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
       <a-entity mindar-image-target="targetIndex: 6">
-        <a-image src="#cypress_cone" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+        <a-image src="#seashell" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
       <a-entity mindar-image-target="targetIndex: 7">
-        <a-image src="#cypress_cone" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
+        <a-image src="#swallow" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
     </a-scene>
   </body>
