@@ -94,11 +94,7 @@
       
         playAudioButton.addEventListener('click', function() {
           overlay.style.display = 'none'; // Скрываем заглушку
-          audioPlayer.src = 'assets/sound/activate.mp3';
-          audioPlayer.play().then(() => {
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-          });
+          // Нет необходимости воспроизводить звук здесь, так как мы активируем аудио позже
         });
       
         const targetAudioMap = {
