@@ -6,9 +6,13 @@
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.4/dist/mindar-image-aframe.prod.js"></script>
 
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const sceneEl = document.querySelector('a-scene'); // Получаем доступ к сцене A-Frame
-    
+      document.addEventListener("DOMContentLoaded", function() {
+        const sceneEl = document.querySelector('a-scene');
+        let arSystem;
+        sceneEl.addEventListener('loaded', function () {
+          arSystem = sceneEl.systems["mindar-image-system"];
+        });
+      
         // Функция для остановки всех аудио
         function stopAllAudio() {
           const audios = document.querySelectorAll('audio');
@@ -17,38 +21,40 @@
             audio.currentTime = 0;
           });
         }
-    
+      
         // Определение соответствия между индексом цели и идентификатором аудио
         const targetAudioMap = [
-          "audio_palo_santo",
-          "audio_swallow",
+          "audio_coral",
+          "audio_cypress_cone",
+          "audio_hamsa",
           "audio_oak_leaf",
+          "audio_palo_santo",
           "audio_quartz",
           "audio_seashell",
-          "audio_hamsa",
-          "audio_coral",
-          "audio_cypress_cone"
+          "audio_swallow"
         ];
-    
-        // Обработчик событий для целей (targets)
-        sceneEl.addEventListener('targetFound', (event) => {
-          stopAllAudio(); // Остановить все аудио перед воспроизведением нового
-    
-          const targetIndex = event.detail.index; // Получаем индекс найденной цели
-          if (targetIndex !== undefined && targetIndex >= 0 && targetIndex < targetAudioMap.length) {
-            const audioId = targetAudioMap[targetIndex];
-            const audio = document.getElementById(audioId);
-            if (audio) {
-              audio.play();
-            }
+      
+        // Обработчик событий для каждой цели
+        targetAudioMap.forEach((audioId, index) => {
+          const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
+          if (targetEntity) {
+            targetEntity.addEventListener("targetFound", event => {
+              console.log("Цель найдена:", index);
+              stopAllAudio();
+              const audio = document.getElementById(audioId);
+              if (audio) {
+                audio.play();
+              }
+            });
+            targetEntity.addEventListener("targetLost", event => {
+              console.log("Цель потеряна:", index);
+              // Опционально: остановить воспроизведение
+            });
           }
         });
-    
-        sceneEl.addEventListener('targetLost', (event) => {
-          // Опционально, можно добавить логику для остановки воспроизведения при потере цели
-        });
       });
-    </script>
+      </script>
+      
 
   </head>
   <body>
