@@ -7,18 +7,46 @@
   </head>
   <body>
     <a-scene 
-    mindar-image="imageTargetSrc: assets/palo_santo.mind;"
+    mindar-image="imageTargetSrc: assets/targets.mind; maxTrack: 8;"    
     color-space="sRGB" 
     renderer="colorManagement: true, physicallyCorrectLights" 
     vr-mode-ui="enabled: false" 
     device-orientation-permission-ui="enabled: false">
       <a-assets>
-        <img id="card" src="assets/palo_santo.png" />
+        <img id="palo_santo" src="assets/palo_santo.png" />
+        <img id="swallow" src="assets/swallow.png" />
+        <img id="oak_leaf" src="assets/oak_leaf.png" />
+        <img id="quartz" src="assets/quartz.png" />
+        <img id="seashell" src="assets/seashell.png" />
+        <img id="hamsa" src="assets/hamsa.png" />
+        <img id="coral" src="assets/coral.png" />
+        <img id="cypress_cone" src="assets/cypress_cone.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-image src="#card" position="0 0 0" rotation="0 0 0"></a-image>
+        <a-image src="#palo_santo" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 1">
+        <a-image src="swallow" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 2">
+        <a-image src="#oak_leaf" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 3">
+        <a-image src="#quartz" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 4">
+        <a-image src="#seashell" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 5">
+        <a-image src="#hamsa" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 6">
+        <a-image src="#coral" position="0 0 0" rotation="0 0 0"></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 7">
+        <a-image src="#cypress_cone" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
     </a-scene>
   </body>
