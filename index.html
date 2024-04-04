@@ -96,25 +96,30 @@
 
     <script>
 
-      document.addEventListener("DOMContentLoaded", function() {
-        const playAudioButton = document.getElementById('playAudioButton');
-        const overlay = document.getElementById('overlay');
-       const sceneEl = document.querySelector('a-scene');
-        playAudioButton.addEventListener('click', function() {
-          overlay.style.display = 'none'; // Скрываем заглушку
+      
+
+document.addEventListener("DOMContentLoaded", function() {
+    const playAudioButton = document.getElementById('playAudioButton');
+    const overlay = document.getElementById('overlay');
+    const sceneEl = document.querySelector('a-scene');
+    const activationAudio = document.getElementById('activate'); // Получаем специальный аудио элемент для активации
+
+    playAudioButton.addEventListener('click', function() {
+        overlay.style.display = 'none'; // Скрываем заглушку
         sceneEl.style.display = 'block'; // Показываем A-Frame сцену
-                sceneEl.setAttribute('autostart', 'true');
-          // Воспроизведение пустого аудиофайла для разблокировки аудио на iOS
-          document.querySelectorAll('audio').forEach(audio => {
-            audio.play().then(() => {
-                audio.pause(); // Сразу же останавливаем воспроизведение
-                audio.currentTime = 0; // Сбрасываем время аудио
+        
+        // Воспроизведение и немедленная остановка аудиофайла для разблокировки звука на iOS
+        if (activationAudio) {
+            activationAudio.play().then(() => {
+                activationAudio.pause(); // Сразу же останавливаем воспроизведение
+                activationAudio.currentTime = 0; // Сбрасываем время аудио
             }).catch(error => console.error("Ошибка воспроизведения аудио:", error));
-          
-          playAudioButton.style.display = 'none'; // Скрываем кнопку после активации
-        });
-      });
+        }
+
+        // Активация камеры (AR-сцены) и другой функциональности, если это необходимо
+        // Здесь могут быть добавлены дополнительные действия для запуска вашего проекта
     });
+});
 
 
       document.addEventListener("DOMContentLoaded", function() {
