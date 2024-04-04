@@ -87,12 +87,11 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function() {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let audioSources = {}; // Источники для каждого аудиофайла
-        let activeTargets = new Set(); // Множество активных целей
-        const playButton = document.getElementById('playAudioButton');
         const overlay = document.getElementById('overlay');
-        const audioPaths = {
+        const playButton = document.getElementById('playAudioButton');
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioBuffers = {}; // Сохраняем буферы для быстрого доступа
+        const audioFiles = {
           "0": "assets/sound/coral.mp3",
           "1": "assets/sound/cypress_cone.mp3",
           "2": "assets/sound/hamsa.mp3",
@@ -103,58 +102,33 @@
           "7": "assets/sound/swallow.mp3"
         };
       
-        // Функция для загрузки и настройки аудио источников
-        function setupAudioSources() {
-          Object.entries(audioPaths).forEach(([index, path]) => {
-            const source = audioContext.createBufferSource();
-            fetch(path)
-              .then(response => response.arrayBuffer())
-              .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-              .then(decodedData => {
-                source.buffer = decodedData;
-                source.connect(audioContext.destination);
-                source.loop = true; // Если нужно повторять воспроизведение
-                audioSources[index] = source;
-              }).catch(error => console.error('Ошибка загрузки аудио:', error));
+        // Предварительная загрузка аудиофайлов и сохранение их в буферах
+        async function preloadAudio() {
+          const promises = Object.entries(audioFiles).map(async ([index, path]) => {
+            const response = await fetch(path);
+            const arrayBuffer = await response.arrayBuffer();
+            audioBuffers[index] = await audioContext.decodeAudioData(arrayBuffer);
           });
+          await Promise.all(promises);
         }
       
-        playButton.addEventListener('click', () => {
+        async function playAudio(index) {
+          if (audioBuffers[index]) {
+            const source = audioContext.createBufferSource();
+            source.buffer = audioBuffers[index];
+            source.connect(audioContext.destination);
+            source.start(0);
+          }
+        }
+      
+        playButton.addEventListener('click', async () => {
           overlay.style.display = 'none';
-          // Активация AudioContext, если он еще не был активирован
-          if (audioContext.state === 'suspended') {
-            audioContext.resume();
-          }
-          setupAudioSources();
+          document.querySelector('a-scene').style.display = 'block';
+          await audioContext.resume(); // Разблокировка AudioContext
+          await preloadAudio(); // Предварительная загрузка аудиофайлов
         });
       
-        const sceneEl = document.querySelector('a-scene');
-        sceneEl.addEventListener('targetFound', (e) => {
-          const index = e.detail.index.toString();
-          if (!activeTargets.has(index)) {
-            activeTargets.add(index);
-            audioSources[index]?.start(0);
-          }
-        });
-      
-        sceneEl.addEventListener('targetLost', (e) => {
-          const index = e.detail.index.toString();
-          if (activeTargets.has(index)) {
-            activeTargets.delete(index);
-            // Остановка воспроизведения, если это последняя активная цель
-            if (activeTargets.size === 0) {
-              Object.values(audioSources).forEach(source => {
-                try {
-                  source.stop();
-                } catch (error) {
-                  // Игнорируем ошибки остановки, так как они могут возникать, если трек уже остановлен
-                }
-              });
-              // Повторная настройка аудио источников для возможности повторного воспроизведения
-              setupAudioSources();
-            }
-          }
-        });
+        // Добавьте здесь логику взаимодействия с AR-сценой и воспроизведение соответствующих аудио
       });
       </script>
       
