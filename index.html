@@ -32,6 +32,7 @@
         <audio id="audio_hamsa" src="assets/sound/hamsa.mp3"></audio>
         <audio id="audio_coral" src="assets/sound/coral.mp3"></audio>
         <audio id="audio_cypress_cone" src="assets/sound/cypress_cone.mp3"></audio>
+        <audio id="activate" src="assets/sound/activate.mp3"></audio>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -66,19 +67,18 @@
 
     <script>
 
-document.addEventListener("DOMContentLoaded", function() {
-  const playAudioButton = document.getElementById('playAudioButton');
-  playAudioButton.addEventListener('click', function() {
-    // Попытка воспроизвести все аудиофайлы, чтобы разблокировать аудио на iOS
-    document.querySelectorAll('audio').forEach(audio => {
-      audio.play().then(() => {
-        audio.pause(); // Сразу же останавливаем воспроизведение
-        audio.currentTime = 0; // Сбрасываем время аудио
-      }).catch(error => console.error("Ошибка воспроизведения аудио:", error));
-    });
-    playAudioButton.style.display = 'none'; // Скрываем кнопку после активации
-  });
-});
+      document.addEventListener("DOMContentLoaded", function() {
+        const playAudioButton = document.getElementById('playAudioButton');
+        playAudioButton.addEventListener('click', function() {
+          // Воспроизведение пустого аудиофайла для разблокировки аудио на iOS
+          const unlockAudio = document.getElementById('activate');
+          unlockAudio.play().then(() => {
+            console.log("Аудио разблокировано");
+          }).catch(error => console.error("Ошибка разблокировки аудио:", error));
+          
+          playAudioButton.style.display = 'none'; // Скрываем кнопку после активации
+        });
+      });
 
 
       document.addEventListener("DOMContentLoaded", function() {
