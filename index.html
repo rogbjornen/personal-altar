@@ -39,7 +39,7 @@
   </div>
 
     <a-scene 
-    mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 30; missTolerance: 30; maxTrack: 8"    
+    mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 10; missTolerance: 10; maxTrack: 8"    
     color-space="sRGB" 
     renderer="colorManagement: true, physicallyCorrectLights" 
     vr-mode-ui="enabled: false" 
@@ -90,13 +90,17 @@
         const overlay = document.getElementById('overlay');
         const playAudioButton = document.getElementById('playAudioButton');
         const audioPlayer = document.getElementById('audioPlayer'); // Элемент аудиоплеера
-        
+        let activeTargetCount = 0; // Счётчик активных целей
+      
         playAudioButton.addEventListener('click', function() {
           overlay.style.display = 'none'; // Скрываем заглушку
-          // Нет необходимости воспроизводить звук здесь, так как мы активируем аудио позже
+          audioPlayer.src = 'assets/sound/activate.mp3';
+          audioPlayer.play().then(() => {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+          });
         });
       
-        // Сопоставление индексов целей с файлами аудио
         const targetAudioMap = {
           "0": "assets/sound/coral.mp3",
           "1": "assets/sound/cypress_cone.mp3",
@@ -107,27 +111,35 @@
           "6": "assets/sound/seashell.mp3",
           "7": "assets/sound/swallow.mp3"
         };
+
       
         const sceneEl = document.querySelector('a-scene');
         
-        Object.keys(targetAudioMap).forEach(index => {
-          const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
-          
-          if(targetEntity) {
-            targetEntity.addEventListener("targetFound", () => {
-              audioPlayer.src = targetAudioMap[index]; // Установка нужного источника
-              audioPlayer.play() // Воспроизведение аудио
-                .catch(error => console.error(`Ошибка воспроизведения для цели ${index}:`, error));
-            });
+        // Подписка на события обнаружения и потери целей
+        sceneEl.addEventListener('targetFound', (e) => {
+          const index = e.detail.index.toString();
+          if (targetAudioMap[index]) {
+            activeTargetCount++; // Увеличиваем счётчик активных целей
+            audioPlayer.src = targetAudioMap[index];
+            audioPlayer.play().catch(error => console.error(`Ошибка воспроизведения для цели ${index}:`, error));
+          }
+        });
       
-            targetEntity.addEventListener("targetLost", () => {
-              audioPlayer.pause(); // Останавливаем воспроизведение при потере цели
-              audioPlayer.currentTime = 0; // Сброс времени аудио
-            });
+        sceneEl.addEventListener('targetLost', (e) => {
+          const index = e.detail.index.toString();
+          if (targetAudioMap[index]) {
+            activeTargetCount--; // Уменьшаем счётчик активных целей
+            // Если все цели потеряны, останавливаем воспроизведение
+            if (activeTargetCount <= 0) {
+              audioPlayer.pause();
+              audioPlayer.currentTime = 0;
+              activeTargetCount = 0; // Восстанавливаем счётчик на случай отрицательных значений
+            }
           }
         });
       });
       </script>
+      
       
       
 
