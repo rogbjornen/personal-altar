@@ -86,14 +86,18 @@
     
 
     <script>
-      document.addEventListener("DOMContentLoaded", async function() {
+      document.addEventListener("DOMContentLoaded", function() {
         const overlay = document.getElementById('overlay');
-        const playButton = document.getElementById('playAudioButton');
-        const scene = document.querySelector('a-scene');
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let audioBuffers = {};
-        let sources = {};
-        const audioFiles = {
+        const playAudioButton = document.getElementById('playAudioButton');
+        const audioPlayer = document.getElementById('audioPlayer'); // Элемент аудиоплеера
+        
+        playAudioButton.addEventListener('click', function() {
+          overlay.style.display = 'none'; // Скрываем заглушку
+          // Нет необходимости воспроизводить звук здесь, так как мы активируем аудио позже
+        });
+      
+        // Сопоставление индексов целей с файлами аудио
+        const targetAudioMap = {
           "0": "assets/sound/coral.mp3",
           "1": "assets/sound/cypress_cone.mp3",
           "2": "assets/sound/hamsa.mp3",
@@ -104,50 +108,23 @@
           "7": "assets/sound/swallow.mp3"
         };
       
-        // Функция для предварительной загрузки аудиофайлов
-        async function preloadAudioFiles() {
-          const fileLoadPromises = Object.entries(audioFiles).map(async ([index, filePath]) => {
-            const response = await fetch(filePath);
-            const arrayBuffer = await response.arrayBuffer();
-            audioBuffers[index] = await audioContext.decodeAudioData(arrayBuffer);
-          });
-          await Promise.all(fileLoadPromises);
-        }
+        const sceneEl = document.querySelector('a-scene');
+        
+        Object.keys(targetAudioMap).forEach(index => {
+          const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
+          
+          if(targetEntity) {
+            targetEntity.addEventListener("targetFound", () => {
+              audioPlayer.src = targetAudioMap[index]; // Установка нужного источника
+              audioPlayer.play() // Воспроизведение аудио
+                .catch(error => console.error(`Ошибка воспроизведения для цели ${index}:`, error));
+            });
       
-        // Функция воспроизведения аудио для заданной цели
-        function playAudio(index) {
-          if (audioBuffers[index] && !sources[index]) {
-            const source = audioContext.createBufferSource();
-            source.buffer = audioBuffers[index];
-            source.connect(audioContext.destination);
-            source.loop = true;
-            source.start(0);
-            sources[index] = source;
+            targetEntity.addEventListener("targetLost", () => {
+              audioPlayer.pause(); // Останавливаем воспроизведение при потере цели
+              audioPlayer.currentTime = 0; // Сброс времени аудио
+            });
           }
-        }
-      
-        // Функция остановки аудио для заданной цели
-        function stopAudio(index) {
-          if (sources[index]) {
-            sources[index].stop();
-            delete sources[index];
-          }
-        }
-      
-        playButton.addEventListener('click', async () => {
-          overlay.style.display = 'none';
-          scene.style.display = 'block';
-          await audioContext.resume();
-          await preloadAudioFiles();
-        });
-      
-        // Добавляем обработчики событий для AR-целей
-        scene.addEventListener('targetFound', (e) => {
-          playAudio(e.detail.name);
-        });
-      
-        scene.addEventListener('targetLost', (e) => {
-          stopAudio(e.detail.name);
         });
       });
       </script>
