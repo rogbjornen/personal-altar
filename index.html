@@ -3,11 +3,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+    <style>
+      /* Стили для заглушки */
+      #overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.8);
+          z-index: 1000;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+      }
+      #playAudioButton {
+          padding: 10px 20px;
+          font-size: 20px;
+          cursor: pointer;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      }
+  </style>
+
   </head>
   <body>
-    <button id="playAudioButton" style="position: fixed; z-index: 1000; left: 50%; transform: translateX(-50%); bottom: 20px;">
-      Включить звук
-    </button>
+
+    <div id="overlay">
+      <button id="playAudioButton">Запустить проект</button>
+  </div>
 
     <a-scene 
     mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.0005;"    
@@ -67,18 +96,24 @@
 
     <script>
 
-      document.addEventListener("DOMContentLoaded", function() {
-        const playAudioButton = document.getElementById('playAudioButton');
-        playAudioButton.addEventListener('click', function() {
-          // Воспроизведение пустого аудиофайла для разблокировки аудио на iOS
-          const unlockAudio = document.getElementById('activate');
-          unlockAudio.play().then(() => {
-            console.log("Аудио разблокировано");
-          }).catch(error => console.error("Ошибка разблокировки аудио:", error));
-          
-          playAudioButton.style.display = 'none'; // Скрываем кнопку после активации
+document.addEventListener("DOMContentLoaded", function() {
+    const playAudioButton = document.getElementById('playAudioButton');
+    const overlay = document.getElementById('overlay');
+    const sceneEl = document.querySelector('a-scene');
+    playAudioButton.addEventListener('click', function() {
+        overlay.style.display = 'none'; // Скрываем заглушку
+        sceneEl.style.display = 'block'; // Показываем A-Frame сцену
+        // Здесь можно добавить код для активации звука, если это необходимо
+        // Активация камеры (AR-сцены)
+        sceneEl.setAttribute('autostart', 'true');
+        document.querySelectorAll('audio').forEach(audio => {
+            audio.play().then(() => {
+                audio.pause(); // Сразу же останавливаем воспроизведение
+                audio.currentTime = 0; // Сбрасываем время аудио
+            }).catch(error => console.error("Ошибка воспроизведения аудио:", error));
         });
-      });
+    });
+});
 
 
       document.addEventListener("DOMContentLoaded", function() {
