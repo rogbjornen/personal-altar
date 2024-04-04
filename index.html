@@ -4,58 +4,6 @@
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.4/dist/mindar-image.prod.js"></script>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.4/dist/mindar-image-aframe.prod.js"></script>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const sceneEl = document.querySelector('a-scene');
-        let arSystem;
-        sceneEl.addEventListener('loaded', function () {
-          arSystem = sceneEl.systems["mindar-image-system"];
-        });
-      
-        // Функция для остановки всех аудио
-        function stopAllAudio() {
-          const audios = document.querySelectorAll('audio');
-          audios.forEach((audio) => {
-            audio.pause();
-            audio.currentTime = 0;
-          });
-        }
-      
-        // Определение соответствия между индексом цели и идентификатором аудио
-        const targetAudioMap = [
-          "audio_coral",
-          "audio_cypress_cone",
-          "audio_hamsa",
-          "audio_oak_leaf",
-          "audio_palo_santo",
-          "audio_quartz",
-          "audio_seashell",
-          "audio_swallow"
-        ];
-      
-        // Обработчик событий для каждой цели
-        targetAudioMap.forEach((audioId, index) => {
-          const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
-          if (targetEntity) {
-            targetEntity.addEventListener("targetFound", event => {
-              console.log("Цель найдена:", index);
-              stopAllAudio();
-              const audio = document.getElementById(audioId);
-              if (audio) {
-                audio.play();
-              }
-            });
-            targetEntity.addEventListener("targetLost", event => {
-              console.log("Цель потеряна:", index);
-              // Опционально: остановить воспроизведение
-            });
-          }
-        });
-      });
-      </script>
-      
-
   </head>
   <body>
     <a-scene 
@@ -110,5 +58,56 @@
         <a-image src="#swallow" width="0.6" height="0.8" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
     </a-scene>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const sceneEl = document.querySelector('a-scene');
+        let arSystem;
+        sceneEl.addEventListener('loaded', function () {
+          arSystem = sceneEl.systems["mindar-image-system"];
+        });
+      
+        // Функция для остановки всех аудио
+        function stopAllAudio() {
+          const audios = document.querySelectorAll('audio');
+          audios.forEach((audio) => {
+            audio.pause();
+            audio.currentTime = 0;
+          });
+        }
+      
+        // Определение соответствия между индексом цели и идентификатором аудио
+        const targetAudioMap = [
+          "audio_coral",
+          "audio_cypress_cone",
+          "audio_hamsa",
+          "audio_oak_leaf",
+          "audio_palo_santo",
+          "audio_quartz",
+          "audio_seashell",
+          "audio_swallow"
+        ];
+      
+        // Обработчик событий для каждой цели
+        targetAudioMap.forEach((audioId, index) => {
+          const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
+          if (targetEntity) {
+            targetEntity.addEventListener("targetFound", event => {
+              console.log("Цель найдена:", index);
+              stopAllAudio();
+              const audio = document.getElementById(audioId);
+              if (audio) {
+                audio.play();
+              }
+            });
+            targetEntity.addEventListener("targetLost", event => {
+              console.log("Цель потеряна:", index);
+              // Опционально: остановить воспроизведение
+            });
+          }
+        });
+      });
+      </script>
+
   </body>
 </html>
