@@ -5,8 +5,12 @@
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
   <body>
+    <button id="playAudioButton" style="position: fixed; z-index: 1000; left: 50%; transform: translateX(-50%); bottom: 20px;">
+      Включить звук
+    </button>
+
     <a-scene 
-    mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.0001;"    
+    mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.0005;"    
     color-space="sRGB" 
     renderer="colorManagement: true, physicallyCorrectLights" 
     vr-mode-ui="enabled: false" 
@@ -58,7 +62,25 @@
       </a-entity>
     </a-scene>
 
+    
+
     <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+  const playAudioButton = document.getElementById('playAudioButton');
+  playAudioButton.addEventListener('click', function() {
+    // Попытка воспроизвести все аудиофайлы, чтобы разблокировать аудио на iOS
+    document.querySelectorAll('audio').forEach(audio => {
+      audio.play().then(() => {
+        audio.pause(); // Сразу же останавливаем воспроизведение
+        audio.currentTime = 0; // Сбрасываем время аудио
+      }).catch(error => console.error("Ошибка воспроизведения аудио:", error));
+    });
+    playAudioButton.style.display = 'none'; // Скрываем кнопку после активации
+  });
+});
+
+
       document.addEventListener("DOMContentLoaded", function() {
         const sceneEl = document.querySelector('a-scene');
         let arSystem;
