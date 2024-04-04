@@ -21,12 +21,18 @@
         <img id="hamsa" src="assets/hamsa.png" />
         <img id="coral" src="assets/coral.png" />
         <img id="cypress_cone" src="assets/cypress_cone.png" />
-        <audio id="audio_palo_santo" src="assets/palo_santo.mp3"></audio>
+        <audio id="audio_palo_santo" src="assets/sound/palo_santo.mp3"></audio>
+        <audio id="audio_swallow" src="assets/sound/swallow.mp3"></audio>
+        <audio id="audio_oak_leaf" src="assets/sound/oak_leaf.mp3"></audio>
+        <audio id="audio_quartz" src="assets/sound/quartz.mp3"></audio>
+        <audio id="audio_seashell" src="assets/sound/seashell.mp3"></audio>
+        <audio id="audio_hamsa" src="assets/sound/hamsa.mp3"></audio>
+        <audio id="audio_coral" src="assets/sound/coral.mp3"></audio>
+        <audio id="audio_cypress_cone" src="assets/sound/cypress_cone.mp3"></audio>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-      <a-entity mindar-image-target="targetIndex: 0"
-      sound="src: assets/palo_santo.mp3; autoplay: true">
+      <a-entity mindar-image-target="targetIndex: 0">
         <a-image 
         src="#palo_santo" width="1.5" height="2" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
@@ -52,5 +58,53 @@
         <a-image src="#cypress_cone" width="1.5" height="2" position="0 0 0" rotation="0 0 0"></a-image>
       </a-entity>
     </a-scene>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const sceneEl = document.querySelector('a-scene'); // Получаем доступ к сцене A-Frame
+    
+        // Функция для остановки всех аудио
+        function stopAllAudio() {
+          const audios = document.querySelectorAll('audio');
+          audios.forEach((audio) => {
+            audio.pause();
+            audio.currentTime = 0;
+          });
+        }
+    
+        // Определение соответствия между индексом цели и идентификатором аудио
+        const targetAudioMap = [
+          "audio_palo_santo",
+          "audio_swallow",
+          "audio_oak_leaf",
+          "audio_quartz",
+          "audio_seashell",
+          "audio_hamsa",
+          "audio_coral",
+          "audio_cypress_cone"
+        ];
+    
+        // Обработчик событий для целей (targets)
+        sceneEl.addEventListener('targetFound', (event) => {
+          stopAllAudio(); // Остановить все аудио перед воспроизведением нового
+    
+          const targetIndex = event.detail.index; // Получаем индекс найденной цели
+          if (targetIndex !== undefined && targetIndex >= 0 && targetIndex < targetAudioMap.length) {
+            const audioId = targetAudioMap[targetIndex];
+            const audio = document.getElementById(audioId);
+            if (audio) {
+              audio.play();
+            }
+          }
+        });
+    
+        sceneEl.addEventListener('targetLost', (event) => {
+          // Опционально, можно добавить логику для остановки воспроизведения при потере цели
+        });
+      });
+    </script>
+    
+    
+
   </body>
 </html>
