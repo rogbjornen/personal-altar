@@ -96,23 +96,24 @@
 
     <script>
 
-document.addEventListener("DOMContentLoaded", function() {
-    const playAudioButton = document.getElementById('playAudioButton');
-    const overlay = document.getElementById('overlay');
-    const sceneEl = document.querySelector('a-scene');
-    playAudioButton.addEventListener('click', function() {
-        // Воспроизведение пустого аудиофайла для разблокировки аудио на iOS и других платформах
-        const unlockAudio = document.getElementById('activate');
-        unlockAudio.play().then(() => {
-            console.log("Аудио разблокировано");
-            overlay.style.display = 'none'; // Скрываем заглушку
-            sceneEl.style.display = 'block'; // Показываем A-Frame сцену
-            // Теперь, когда аудио разблокировано, все последующие воспроизведения аудио должны работать нормально
-        }).catch(error => {
-            console.error("Ошибка разблокировки аудио:", error);
+      document.addEventListener("DOMContentLoaded", function() {
+        const playAudioButton = document.getElementById('playAudioButton');
+        const overlay = document.getElementById('overlay');
+       const sceneEl = document.querySelector('a-scene');
+        playAudioButton.addEventListener('click', function() {
+          overlay.style.display = 'none'; // Скрываем заглушку
+        sceneEl.style.display = 'block'; // Показываем A-Frame сцену
+                sceneEl.setAttribute('autostart', 'true');
+          // Воспроизведение пустого аудиофайла для разблокировки аудио на iOS
+          document.querySelectorAll('audio').forEach(audio => {
+            audio.play().then(() => {
+                audio.pause(); // Сразу же останавливаем воспроизведение
+                audio.currentTime = 0; // Сбрасываем время аудио
+            }).catch(error => console.error("Ошибка воспроизведения аудио:", error));
+          
+          playAudioButton.style.display = 'none'; // Скрываем кнопку после активации
         });
-
-        // Дополнительно, если необходимо, активируйте камеру или другие элементы AR здесь
+      });
     });
 
 
