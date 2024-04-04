@@ -95,9 +95,6 @@
     
 
     <script>
-
-      
-
 document.addEventListener("DOMContentLoaded", function() {
   const playAudioButton = document.getElementById('playAudioButton');
   const overlay = document.getElementById('overlay');
@@ -139,54 +136,6 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
-
-      document.addEventListener("DOMContentLoaded", function() {
-        const sceneEl = document.querySelector('a-scene');
-        let arSystem;
-        sceneEl.addEventListener('loaded', function () {
-          arSystem = sceneEl.systems["mindar-image-system"];
-        });
-      
-        // Функция для остановки всех аудио
-        function stopAllAudio() {
-          const audios = document.querySelectorAll('audio');
-          audios.forEach((audio) => {
-            audio.pause();
-            audio.currentTime = 0;
-          });
-        }
-      
-        // Определение соответствия между индексом цели и идентификатором аудио
-        const targetAudioMap = [
-          "audio_coral",
-          "audio_cypress_cone",
-          "audio_hamsa",
-          "audio_oak_leaf",
-          "audio_palo_santo",
-          "audio_quartz",
-          "audio_seashell",
-          "audio_swallow"
-        ];
-      
-        // Обработчик событий для каждой цели
-        targetAudioMap.forEach((audioId, index) => {
-          const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
-          if (targetEntity) {
-            targetEntity.addEventListener("targetFound", event => {
-              console.log("Цель найдена:", index);
-              stopAllAudio();
-              const audio = document.getElementById(audioId);
-              if (audio) {
-                audio.play();
-              }
-            });
-            targetEntity.addEventListener("targetLost", event => {
-              console.log("Цель потеряна:", index);
-              // Опционально: остановить воспроизведение
-            });
-          }
-        });
-      });
       </script>
 
   </body>
