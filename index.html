@@ -86,78 +86,52 @@
     
 
     <script>
-  document.addEventListener("DOMContentLoaded", function() {
-  const overlay = document.getElementById('overlay');
-  const playAudioButton = document.getElementById('playAudioButton');
-  
-  playAudioButton.addEventListener('click', function() {
-    overlay.style.display = 'none'; // Скрываем заглушку
-  });
-
-  const targetAudioMap = {
-    "0": "assets/sound/coral.mp3",
-    "1": "assets/sound/cypress_cone.mp3",
-    "2": "assets/sound/hamsa.mp3",
-    "3": "assets/sound/oak_leaf.mp3",
-    "4": "assets/sound/palo_santo.mp3",
-    "5": "assets/sound/quartz.mp3",
-    "6": "assets/sound/seashell.mp3",
-    "7": "assets/sound/swallow.mp3"
-  };
-
-  // Создание и управление аудиоплеерами для каждой цели
-  const audioPlayers = {}; // Хранение аудиоплееров по индексам целей
-
-  const sceneEl = document.querySelector('a-scene');
-
-  // Функция для плавного уменьшения громкости и остановки аудио
-  function fadeOutAudio(audioPlayer, callback) {
-    const initialVolume = audioPlayer.volume;
-    const fadeTime = 1000; // Время затухания в миллисекундах, можно настроить
-    const stepTime = 50; // Интервал между шагами громкости
-  
-    let volume = initialVolume;
-    const stepVolume = initialVolume / (fadeTime / stepTime); // Шаг уменьшения громкости
-  
-    const fadeInterval = setInterval(() => {
-      volume -= stepVolume;
-      if (volume <= 0) {
-        clearInterval(fadeInterval);
-        audioPlayer.pause();
-        audioPlayer.volume = initialVolume; // Восстановление начальной громкости для следующего воспроизведения
-        if (callback) callback(); // Вызов callback-функции после завершения затухания
-      } else {
-        audioPlayer.volume = volume;
-      }
-    }, stepTime);
-  }
-
-  Object.keys(targetAudioMap).forEach(index => {
-    const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
-    
-    if (targetEntity) {
-      targetEntity.addEventListener("targetFound", () => {
-        if (!audioPlayers[index]) {
-          const audio = new Audio(targetAudioMap[index]);
-          audio.loop = true; // Повтор, если нужно
-          audioPlayers[index] = audio;
-        }
-        audioPlayers[index].play().catch(error => console.error(`Ошибка воспроизведения для цели ${index}:`, error));
-      });
-
-      targetEntity.addEventListener("targetLost", () => {
-        if (audioPlayers[index]) {
-          fadeOutAudio(audioPlayers[index], () => {
-            // После затухания, если нужно выполнить дополнительные действия
-          });
-          // Если хотите полностью удалить аудиоплеер после затухания, переместите следующую строку в callback
-          // delete audioPlayers[index];
-        }
-      });
-    }
-  });
-});
-
+      document.addEventListener("DOMContentLoaded", function() {
+        const overlay = document.getElementById('overlay');
+        const playAudioButton = document.getElementById('playAudioButton');
+        
+        playAudioButton.addEventListener('click', function() {
+          overlay.style.display = 'none'; // Скрываем заглушку
+        });
+      
+        const targetAudioMap = {
+          "0": "assets/sound/coral.mp3",
+          "1": "assets/sound/cypress_cone.mp3",
+          "2": "assets/sound/hamsa.mp3",
+          "3": "assets/sound/oak_leaf.mp3",
+          "4": "assets/sound/palo_santo.mp3",
+          "5": "assets/sound/quartz.mp3",
+          "6": "assets/sound/seashell.mp3",
+          "7": "assets/sound/swallow.mp3"
+        };
+      
+        // Создание и управление аудиоплеерами для каждой цели
+        const audioPlayers = {}; // Хранение аудиоплееров по индексам целей
+      
+        const sceneEl = document.querySelector('a-scene');
+        Object.keys(targetAudioMap).forEach(index => {
+          const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
+          
+          if(targetEntity) {
+            targetEntity.addEventListener("targetFound", () => {
+              if (!audioPlayers[index]) {
+                const audio = new Audio(targetAudioMap[index]);
+                audioPlayers[index] = audio;
+                audio.loop = true; // Повтор, если нужно
+              }
+              audioPlayers[index].play().catch(error => console.error(`Ошибка воспроизведения для цели ${index}:`, error));
+            });
+      
+            targetEntity.addEventListener("targetLost", () => {
+              if (audioPlayers[index]) {
+                audioPlayers[index].pause();
+                // Если хотите полностью удалить аудиоплеер, можно раскомментировать следующую строку
+                // delete audioPlayers[index];
+              }
+            });
+          }
+        });
+      });ё
       </script>
       
       
