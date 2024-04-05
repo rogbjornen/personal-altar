@@ -111,8 +111,8 @@
   function fadeOutAudio(index) {
     const fadeAudio = setInterval(function () {
       // Уменьшаем громкость на 0.05
-      if (audioPlayers[index].volume > 0.05) {
-        audioPlayers[index].volume -= 0.05;
+      if (audioPlayers[index].volume > 0.33) {
+        audioPlayers[index].volume -= 0.33;
       } else {
         // Когда громкость достаточно мала, останавливаем и удаляем аудио
         clearInterval(fadeAudio);
@@ -122,7 +122,7 @@
         // Если аудиоплеер больше не нужен, можно удалить его
         // delete audioPlayers[index];
       }
-    }, 50); // Повторять каждые 200 мс
+    }, 20); // Повторять каждые 200 мс
   }
 
   const sceneEl = document.querySelector('a-scene');
