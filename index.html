@@ -31,6 +31,25 @@
           box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       }
 
+      #loader {
+          display: none;
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #3B3398;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          animation: spin 2s linear infinite;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
       #star {
         position: absolute;
         top: 5%;
@@ -55,7 +74,10 @@
   <body>
     <div id="overlay">
       <object id="star" data="assets/star.svg" type="image/svg+xml"></object>
-      <button id="playAudioButton">Continue</button>
+      <button id="playAudioButton">
+        Continue
+        <div id="loader"></div>
+      </button>
       <object id="sign" data="assets/sign.svg" type="image/svg+xml"></object>
     </div>
 
@@ -110,6 +132,7 @@
       document.addEventListener("DOMContentLoaded", function() {
   const overlay = document.getElementById('overlay');
   const playAudioButton = document.getElementById('playAudioButton');
+  const loader = document.getElementById('loader');
   let audioContext; // Для управления звуком
   let audioBuffers = {}; // Кэш звуковых данных
   const targetAudioMap = {
@@ -123,12 +146,18 @@
     "7": "assets/sound/08_swallow.mp3"
   };
 
-  // Активация звука
-  playAudioButton.addEventListener('click', async function() {
-    overlay.style.display = 'none';
+  playAudioButton.addEventListener('click', async () => {
+    playAudioButton.style.pointerEvents = 'none'; // Отключение взаимодействия с кнопкой
+    loader.style.display = 'block'; // Отображение индикатора загрузки
+
+    // Ваш код для инициализации звука и других действий после нажатия кнопки
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    await loadSound('assets/sound/activate.mp3'); // Короткий звук активации
-    playSound('activate.mp3');
+    await loadSound('assets/sound/activate.mp3'); // Загрузка звукового файла
+    playSound('activate.mp3'); // Воспроизведение звука
+
+    // После завершения действий:
+    playAudioButton.style.pointerEvents = 'auto'; // Включение взаимодействия с кнопкой
+    loader.style.display = 'none'; // Скрытие индикатора загрузки
   });
 
   // Функция для загрузки звуковых файлов
