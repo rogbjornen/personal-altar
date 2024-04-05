@@ -108,18 +108,6 @@
     
 
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const playAudioButton = document.getElementById("playAudioButton");
-        const sceneEl = document.querySelector("a-scene");
-
-        // Скрываем кнопку до инициализации AR-системы
-        playAudioButton.style.display = "none";
-
-        // Обработчик события arTrackingStarted для отображения кнопки
-        sceneEl.addEventListener("arTrackingStarted", () => {
-          playAudioButton.style.display = "block";
-        });
-
       document.addEventListener("DOMContentLoaded", function() {
   const overlay = document.getElementById('overlay');
   const playAudioButton = document.getElementById('playAudioButton');
@@ -135,6 +123,13 @@
     "6": "assets/sound/07_seashell.mp3",
     "7": "assets/sound/08_swallow.mp3"
   };
+
+  const sceneEl = document.querySelector('a-scene');
+
+sceneEl.addEventListener('arRenderComplete', function() {
+    // Ассеты MindAR загружены, показываем кнопку
+    document.getElementById('playAudioButton').style.display = 'block';
+});
 
   // Активация звука
   playAudioButton.addEventListener('click', async function() {
