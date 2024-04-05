@@ -33,7 +33,7 @@
 
   </head>
   <body>
-    <audio id="audioPlayer"></audio>
+    
     <div id="overlay">
       <button id="playAudioButton">Включить звук</button>
   </div>
@@ -89,7 +89,6 @@
       document.addEventListener("DOMContentLoaded", function() {
         const overlay = document.getElementById('overlay');
         const playAudioButton = document.getElementById('playAudioButton');
-        const audioPlayer = document.getElementById('audioPlayer'); // Элемент аудиоплеера
         
         playAudioButton.addEventListener('click', function() {
           overlay.style.display = 'none'; // Скрываем заглушку
@@ -106,36 +105,29 @@
           "7": "assets/sound/swallow.mp3"
         };
       
-        let activeTargets = {}; // Хранение информации о распознанных целях
-        
-        function updateAudioPlayback() {
-          // Определение последней активной цели
-          const lastTargetIndex = Object.keys(activeTargets).reduce((lastIndex, currentKey) => {
-            return activeTargets[currentKey] > (activeTargets[lastIndex] || 0) ? currentKey : lastIndex;
-          }, null);
-          
-          if(lastTargetIndex !== null) {
-            audioPlayer.src = targetAudioMap[lastTargetIndex];
-            audioPlayer.play().catch(error => console.error(`Ошибка воспроизведения для цели ${lastTargetIndex}:`, error));
-          } else {
-            audioPlayer.pause(); // Останавливаем воспроизведение, если активных целей нет
-            audioPlayer.currentTime = 0;
-          }
-        }
-        
+        // Создание и управление аудиоплеерами для каждой цели
+        const audioPlayers = {}; // Хранение аудиоплееров по индексам целей
+      
         const sceneEl = document.querySelector('a-scene');
         Object.keys(targetAudioMap).forEach(index => {
           const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
           
           if(targetEntity) {
             targetEntity.addEventListener("targetFound", () => {
-              activeTargets[index] = Date.now(); // Записываем время распознавания цели
-              updateAudioPlayback(); // Обновляем воспроизведение
+              if (!audioPlayers[index]) {
+                const audio = new Audio(targetAudioMap[index]);
+                audioPlayers[index] = audio;
+                audio.loop = true; // Повтор, если нужно
+              }
+              audioPlayers[index].play().catch(error => console.error(`Ошибка воспроизведения для цели ${index}:`, error));
             });
       
             targetEntity.addEventListener("targetLost", () => {
-              delete activeTargets[index]; // Удаляем цель из активных
-              updateAudioPlayback(); // Обновляем воспроизведение
+              if (audioPlayers[index]) {
+                audioPlayers[index].pause();
+                // Если хотите полностью удалить аудиоплеер, можно раскомментировать следующую строку
+                // delete audioPlayers[index];
+              }
             });
           }
         });
