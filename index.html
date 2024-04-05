@@ -139,7 +139,7 @@
   }
 
   // Функция для воспроизведения звука
-  function playSound(url, loop = false, fadeInDuration = 10000, fadeOutDuration = 10000) {
+  function playSound(url, loop = false, fadeInDuration = 7000, fadeOutDuration = 7000) {
     const source = audioContext.createBufferSource();
     source.buffer = audioBuffers[url];
     source.loop = loop;
