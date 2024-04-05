@@ -29,6 +29,7 @@
           border: none;
           border-radius: 800px;
           box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+          display: none;
       }
 
       #star {
@@ -107,6 +108,18 @@
     
 
     <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const playAudioButton = document.getElementById("playAudioButton");
+        const sceneEl = document.querySelector("a-scene");
+
+        // Скрываем кнопку до инициализации AR-системы
+        playAudioButton.style.display = "none";
+
+        // Обработчик события arTrackingStarted для отображения кнопки
+        sceneEl.addEventListener("arTrackingStarted", () => {
+          playAudioButton.style.display = "block";
+        });
+
       document.addEventListener("DOMContentLoaded", function() {
   const overlay = document.getElementById('overlay');
   const playAudioButton = document.getElementById('playAudioButton');
