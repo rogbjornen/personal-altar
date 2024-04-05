@@ -135,10 +135,13 @@
     source.stop = function() {
       gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + fadeOutDuration / 1000);
       setTimeout(() => {
+        source.stop();
         source.disconnect();
         gainNode.disconnect();
       }, fadeOutDuration);
     };
+
+    return source;
   }
 
   // Управление звуком для каждой цели
@@ -169,7 +172,11 @@
 
   // Остановка всех звуков при отсутствии целей
   sceneEl.addEventListener("nomatch", () => {
-    Object.values(activeSources).forEach(source => source.stop());
+    Object.values(activeSources).forEach(source => {
+      if (source) {
+        source.stop();
+      }
+    });
     activeSources = {};
   });
 });
