@@ -12,7 +12,7 @@
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(8, 0, 78, 1.0);
+          background: #3B3398;
           z-index: 1000;
           display: flex;
           justify-content: center;
@@ -24,18 +24,37 @@
           font-size: 20px;
           cursor: pointer;
           background-color: #ffffff;
-          color: rgb(9, 20, 72);
+          color: #3B3398;
           border: none;
-          border-radius: 5px;
+          border-radius: 800px;
           box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      }
+      #sign {
+        position: absolute;
+        bottom: 25%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 56px;
+        height: 34px;
+      }
+
+      #star {
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 80px;
       }
   </style>
 
   </head>
   <body>
     <div id="overlay">
-      <button id="playAudioButton">Включить звук</button>
-  </div>
+      <object id="star" data="assets/star.svg" type="image/svg+xml"></object>
+      <button id="playAudioButton">Continue</button>
+      <object id="sign" data="assets/sign.svg" type="image/svg+xml"></object>
+    </div>
 
     <a-scene 
     mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 10; missTolerance: 10; maxTrack: 8"    
@@ -44,14 +63,14 @@
     vr-mode-ui="enabled: false" 
     device-orientation-permission-ui="enabled: false">
       <a-assets>
-        <img id="coral" src="assets/coral.png" />
-        <img id="cypress_cone" src="assets/cypress_сone.png" />
-        <img id="hamsa" src="assets/hamsa.png" />
-        <img id="oak_leaf" src="assets/oak_leaf.png" />
-        <img id="palo_santo" src="assets/palo_santo.png" />
-        <img id="quartz" src="assets/quartz.png" />
-        <img id="seashell" src="assets/seashell.png" />
-        <img id="swallow" src="assets/swallow.png" />
+        <img id="coral" src="assets/01_coral.png" />
+        <img id="cypress_cone" src="assets/02_cypress_cone.png" />
+        <img id="hamsa" src="assets/03_hamsa.png" />
+        <img id="oak_leaf" src="assets/04_oak_leaf.png" />
+        <img id="palo_santo" src="assets/05_palo_santo.png" />
+        <img id="quartz" src="assets/06_quartz.png" />
+        <img id="seashell" src="assets/07_seashell.png" />
+        <img id="swallow" src="assets/08_swallow.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -91,14 +110,14 @@
   let audioContext; // Для управления звуком
   let audioBuffers = {}; // Кэш звуковых данных
   const targetAudioMap = {
-    "0": "assets/sound/coral.mp3",
-    "1": "assets/sound/cypress_cone.mp3",
-    "2": "assets/sound/hamsa.mp3",
-    "3": "assets/sound/oak_leaf.mp3",
-    "4": "assets/sound/palo_santo.mp3",
-    "5": "assets/sound/quartz.mp3",
-    "6": "assets/sound/seashell.mp3",
-    "7": "assets/sound/swallow.mp3"
+    "0": "assets/sound/01_coral.mp3",
+    "1": "assets/sound/02_cypress_cone.mp3",
+    "2": "assets/sound/03_hamsa.mp3",
+    "3": "assets/sound/04_oak_leaf.mp3",
+    "4": "assets/sound/05_palo_santo.mp3",
+    "5": "assets/sound/06_quartz.mp3",
+    "6": "assets/sound/07_seashelll.mp3",
+    "7": "assets/sound/08_swallow.mp3"
   };
 
   // Активация звука
@@ -117,7 +136,7 @@
   }
 
   // Функция для воспроизведения звука
-  function playSound(url, loop = false, fadeInDuration = 5000, fadeOutDuration = 5000) {
+  function playSound(url, loop = false, fadeInDuration = 10000, fadeOutDuration = 10000) {
     const source = audioContext.createBufferSource();
     source.buffer = audioBuffers[url];
     source.loop = loop;
