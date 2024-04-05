@@ -86,7 +86,7 @@
     
 
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function() {
   const overlay = document.getElementById('overlay');
   const playAudioButton = document.getElementById('playAudioButton');
   
@@ -105,35 +105,41 @@
     "7": "assets/sound/swallow.mp3"
   };
 
+  // Создание и управление аудиоплеерами для каждой цели
   const audioPlayers = {}; // Хранение аудиоплееров по индексам целей
 
-  // Функция для плавного затухания и остановки аудио
-  function fadeOutAudio(index) {
-    const fadeAudio = setInterval(function () {
-      // Уменьшаем громкость на 0.05
-      if (audioPlayers[index].volume > 0.33) {
-        audioPlayers[index].volume -= 0.33;
+  const sceneEl = document.querySelector('a-scene');
+
+  // Функция для плавного уменьшения громкости и остановки аудио
+  function fadeOutAudio(audioPlayer, callback) {
+    const initialVolume = audioPlayer.volume;
+    const fadeTime = 1000; // Время затухания в миллисекундах, можно настроить
+    const stepTime = 50; // Интервал между шагами громкости
+  
+    let volume = initialVolume;
+    const stepVolume = initialVolume / (fadeTime / stepTime); // Шаг уменьшения громкости
+  
+    const fadeInterval = setInterval(() => {
+      volume -= stepVolume;
+      if (volume <= 0) {
+        clearInterval(fadeInterval);
+        audioPlayer.pause();
+        audioPlayer.volume = initialVolume; // Восстановление начальной громкости для следующего воспроизведения
+        if (callback) callback(); // Вызов callback-функции после завершения затухания
       } else {
-        // Когда громкость достаточно мала, останавливаем и удаляем аудио
-        clearInterval(fadeAudio);
-        audioPlayers[index].pause();
-        audioPlayers[index].currentTime = 0; // Сбрасываем время, если аудио будет вновь воспроизведено
-        audioPlayers[index].volume = 1; // Возвращаем громкость к начальному уровню для будущего воспроизведения
-        // Если аудиоплеер больше не нужен, можно удалить его
-        // delete audioPlayers[index];
+        audioPlayer.volume = volume;
       }
-    }, 20); // Повторять каждые 200 мс
+    }, stepTime);
   }
 
-  const sceneEl = document.querySelector('a-scene');
   Object.keys(targetAudioMap).forEach(index => {
     const targetEntity = sceneEl.querySelector(`[mindar-image-target="targetIndex: ${index}"]`);
     
-    if(targetEntity) {
+    if (targetEntity) {
       targetEntity.addEventListener("targetFound", () => {
         if (!audioPlayers[index]) {
           const audio = new Audio(targetAudioMap[index]);
-          audio.loop = true; // Повторять звук
+          audio.loop = true; // Повтор, если нужно
           audioPlayers[index] = audio;
         }
         audioPlayers[index].play().catch(error => console.error(`Ошибка воспроизведения для цели ${index}:`, error));
@@ -141,7 +147,11 @@
 
       targetEntity.addEventListener("targetLost", () => {
         if (audioPlayers[index]) {
-          fadeOutAudio(index); // Плавное затухание звука
+          fadeOutAudio(audioPlayers[index], () => {
+            // После затухания, если нужно выполнить дополнительные действия
+          });
+          // Если хотите полностью удалить аудиоплеер после затухания, переместите следующую строку в callback
+          // delete audioPlayers[index];
         }
       });
     }
