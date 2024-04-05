@@ -58,6 +58,7 @@
     </div>
 
     <a-scene
+      id="scene"
       mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 10; missTolerance: 10; maxTrack: 8"
       color-space="sRGB"
       renderer="colorManagement: true, physicallyCorrectLights"
@@ -151,6 +152,18 @@
     </a-scene>
 
     <script>
+
+      const sceneEl = document.getElementById("scene");
+      const playAudioButton = document.getElementById("playAudioButton");
+
+      // Скрыть кнопку изначально
+      playAudioButton.style.display = "none";
+
+      // Показать кнопку, когда Mindar готов
+      sceneEl.addEventListener("arReady", () => {
+        playAudioButton.style.display = "block";
+      });
+
       document.addEventListener("DOMContentLoaded", function () {
         const overlay = document.getElementById("overlay");
         const playAudioButton = document.getElementById("playAudioButton");
