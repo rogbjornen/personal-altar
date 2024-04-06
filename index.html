@@ -19,6 +19,7 @@
         align-items: center;
         flex-direction: column;
       }
+
       #playAudioButton {
         padding: 16px 24px;
         font-size: 24px;
@@ -48,11 +49,20 @@
         width: 124px;
         height: 186px;
       }
+
+      #text {
+        padding: 16px 24px;
+        width: 280px;
+        font-size: 24px;
+        color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
     </style>
   </head>
   <body>
     <div id="overlay">
       <object id="star" data="assets/star.svg" type="image/svg+xml"></object>
+      <div id="text">Turn on the sound on your device and press continue</div>
       <button id="playAudioButton">Continue</button>
       <object id="sign" data="assets/sign.svg" type="image/svg+xml"></object>
     </div>
@@ -158,10 +168,12 @@
 
       // Скрыть кнопку изначально
       playAudioButton.style.display = "none";
+      text.style.display = "none";
 
       // Показать кнопку, когда Mindar готов
       sceneEl.addEventListener("arReady", () => {
         playAudioButton.style.display = "block";
+        text.style.display = "block";
       });
 
       document.addEventListener("DOMContentLoaded", function () {
