@@ -85,6 +85,8 @@
         <img id="quartz" src="assets/06_quartz.png" />
         <img id="seashell" src="assets/07_seashell.png" />
         <img id="swallow" src="assets/08_swallow.png" />
+        <img id="quartz2" src="assets/09_quartz2.png" />
+        <img id="rose" src="assets/10_rose.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -160,6 +162,24 @@
           rotation="0 0 0"
         ></a-image>
       </a-entity>
+      <a-entity mindar-image-target="targetIndex: 8">
+        <a-image
+          src="#quartz2"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 9">
+        <a-image
+          src="#rose"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
     </a-scene>
 
     <script>
@@ -191,6 +211,8 @@
           5: "assets/sound/06_quartz.mp3",
           6: "assets/sound/07_seashell.mp3",
           7: "assets/sound/08_swallow.mp3",
+          8: "assets/sound/06_quartz.mp3",
+          9: "assets/sound/09_rose.mp3",
         };
 
         // Активация звука
