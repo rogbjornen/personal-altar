@@ -70,9 +70,9 @@
 
     <a-scene
       id="scene"
-      mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0005; filterBeta: 0.005; warmupTolerance: 5; missTolerance: 15; maxTrack: 6"
+      mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 10; missTolerance: 10; maxTrack: 8"
       color-space="sRGB"
-      renderer="colorManagement: true"
+      renderer="colorManagement: true, physicallyCorrectLights"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
     >
@@ -89,212 +89,101 @@
         <img id="rose" src="assets/09_rose.png" />
       </a-assets>
 
-      <!-- Камера -->
-      <a-camera position="0 0 0" look-controls="enabled: true"></a-camera>
-
-      <!-- Цель 0 с параллаксом -->
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#coral"
-          width="1.5"
-          height="2"
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#coral"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
-      <!-- Цель 1 с параллаксом -->
       <a-entity mindar-image-target="targetIndex: 1">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#cypress_cone"
-          width="1.5"
-          height="2"
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#cypress_cone"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
-      <!-- Цель 2 с параллаксом -->
       <a-entity mindar-image-target="targetIndex: 2">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#hamsa"
-          width="1.5"
-          height="2"
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#hamsa"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
-      <!-- Цель 3 с параллаксом -->
       <a-entity mindar-image-target="targetIndex: 3">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#oak_leaf"
-          width="1.5"
-          height="2"
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#oak_leaf"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
-      <!-- Цель 4 с параллаксом -->
       <a-entity mindar-image-target="targetIndex: 4">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#palo_santo"
-          width="1.5"
-          height="2"
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#palo_santo"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
-      <!-- Цель 5 с параллаксом -->
       <a-entity mindar-image-target="targetIndex: 5">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#quartz"
-          width="1.5"
-          height="2"
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#quartz"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
-      <!-- Цель 6 с параллаксом -->
       <a-entity mindar-image-target="targetIndex: 6">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#seashell"
-          width="1.5"
-          height="2"
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#seashell"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
-      <!-- Цель 7 с параллаксом -->
       <a-entity mindar-image-target="targetIndex: 7">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#swallow"
-          width="1.5"
-          height="2
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#swallow"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
-      <!-- Цель 8 с параллаксом -->
       <a-entity mindar-image-target="targetIndex: 8">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#quartz2"
-          width="1.5"
-          height="2"
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#quartz2"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
-      <!-- Цель 9 с параллаксом -->
       <a-entity mindar-image-target="targetIndex: 9">
-        <!-- Маска: изображение с альфа-каналом -->
         <a-image
           src="#rose"
-          width="1.5"
-          height="2"
-          position="0 0 0.01"
-          transparent="true"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
         ></a-image>
-
-        <!-- Фон: то же изображение внутри sky -->
-        <a-sky
-          src="#rose"
-          radius="5"
-          theta-length="90"
-          position="0 0 -1"
-        ></a-sky>
       </a-entity>
-
     </a-scene>
 
     <script>
+
       const sceneEl = document.getElementById("scene");
       const playAudioButton = document.getElementById("playAudioButton");
 
@@ -311,9 +200,112 @@
       document.addEventListener("DOMContentLoaded", function () {
         const overlay = document.getElementById("overlay");
         const playAudioButton = document.getElementById("playAudioButton");
+        let audioContext; // Для управления звуком
+        let audioBuffers = {}; // Кэш звуковых данных
+        const targetAudioMap = {
+          0: "assets/sound/01_coral.mp3",
+          1: "assets/sound/02_cypress_cone.mp3",
+          2: "assets/sound/03_hamsa.mp3",
+          3: "assets/sound/04_oak_leaf.mp3",
+          4: "assets/sound/05_palo_santo.mp3",
+          5: "assets/sound/06_quartz.mp3",
+          6: "assets/sound/07_seashell.mp3",
+          7: "assets/sound/08_swallow.mp3",
+          8: "assets/sound/06_quartz.mp3",
+          9: "assets/sound/09_rose.mp3",
+        };
 
+        // Активация звука
         playAudioButton.addEventListener("click", async function () {
           overlay.style.display = "none";
+          audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+          await loadSound("assets/sound/activate.mp3"); // Короткий звук активации
+          playSound("activate.mp3");
+        });
+
+        // Функция для загрузки звуковых файлов
+        async function loadSound(url) {
+          const response = await fetch(url);
+          const arrayBuffer = await response.arrayBuffer();
+          audioBuffers[url] = await audioContext.decodeAudioData(arrayBuffer);
+        }
+
+        // Функция для воспроизведения звука
+        function playSound(
+          url,
+          loop = false,
+          fadeInDuration = 5000,
+          fadeOutDuration = 5000
+        ) {
+          const source = audioContext.createBufferSource();
+          source.buffer = audioBuffers[url];
+          source.loop = loop;
+
+          // Применение плавного затухания/нарастания
+          const gainNode = audioContext.createGain();
+          source.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+          gainNode.gain.linearRampToValueAtTime(
+            1,
+            audioContext.currentTime + fadeInDuration / 1000
+          );
+
+          source.start();
+
+          // Остановка и плавное затухание звука
+          source.stop = function () {
+            gainNode.gain.linearRampToValueAtTime(
+              0,
+              audioContext.currentTime + fadeOutDuration / 1000
+            );
+            setTimeout(() => {
+              source.stop();
+              source.disconnect();
+              gainNode.disconnect();
+            }, fadeOutDuration);
+          };
+
+          return source;
+        }
+
+        // Управление звуком для каждой цели
+        const sceneEl = document.querySelector("a-scene");
+        const activeSources = {}; // Хранение воспроизводимых источников звука
+
+        Object.keys(targetAudioMap).forEach((index) => {
+          const targetEntity = sceneEl.querySelector(
+            `[mindar-image-target="targetIndex: ${index}"]`
+          );
+
+          if (targetEntity) {
+            targetEntity.addEventListener("targetFound", () => {
+              const url = targetAudioMap[index];
+              loadSound(url).then(() => {
+                if (!activeSources[index]) {
+                  activeSources[index] = playSound(url, true);
+                }
+              });
+            });
+
+            targetEntity.addEventListener("targetLost", () => {
+              if (activeSources[index]) {
+                activeSources[index].stop();
+                delete activeSources[index];
+              }
+            });
+          }
+        });
+
+        // Остановка всех звуков при отсутствии целей
+        sceneEl.addEventListener("nomatch", () => {
+          Object.values(activeSources).forEach((source) => {
+            if (source) {
+              source.stop();
+            }
+          });
+          activeSources = {};
         });
       });
     </script>
