@@ -5,6 +5,7 @@
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
     <style>
+      /* Стили для заглушки */
       #overlay {
         position: fixed;
         top: 0;
@@ -71,36 +72,135 @@
       id="scene"
       mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 10; missTolerance: 10; maxTrack: 8"
       color-space="sRGB"
-      renderer="colorManagement: true"
+      renderer="colorManagement: true, physicallyCorrectLights"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
     >
       <a-assets>
-        <a-asset-item
-          id="swallowModel"
-          src="assets/3d/08_swallow.glb"
-        ></a-asset-item>
+        <img id="coral" src="assets/01_coral.png" />
+        <img id="cypress_cone" src="assets/02_cypress_cone.png" />
+        <img id="hamsa" src="assets/03_hamsa.png" />
+        <img id="oak_leaf" src="assets/04_oak_leaf.png" />
+        <img id="palo_santo" src="assets/05_palo_santo.png" />
+        <img id="quartz" src="assets/06_quartz.png" />
+        <img id="seashell" src="assets/07_seashell.png" />
+        <img id="swallow" src="assets/08_swallow.png" />
+        <img id="quartz2" src="assets/06_quartz.png" />
+        <img id="rose" src="assets/09_rose.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
-      <a-entity mindar-image-target="targetIndex: 8">
-        <a-entity
-          gltf-model="#swallowModel"
-          scale="0.5 0.5 0.5"
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-image
+          src="#coral"
+          width="0.6"
+          height="0.8"
           position="0 0 0"
-          rotation="0 180 0"
-        >
-        </a-entity>
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 1">
+        <a-image
+          src="#cypress_cone"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 2">
+        <a-image
+          src="#hamsa"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 3">
+        <a-image
+          src="#oak_leaf"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 4">
+        <a-image
+          src="#palo_santo"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 5">
+        <a-image
+          src="#quartz"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 6">
+        <a-image
+          src="#seashell"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 7">
+        <a-image
+          src="#swallow"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 8">
+        <a-image
+          src="#quartz2"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 9">
+        <a-image
+          src="#rose"
+          width="0.6"
+          height="0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+        ></a-image>
       </a-entity>
     </a-scene>
 
     <script>
+      const sceneEl = document.getElementById("scene");
+      const playAudioButton = document.getElementById("playAudioButton");
+      const text = document.getElementById("text");
+
+      // Скрыть кнопку изначально
+      playAudioButton.style.display = "none";
+      text.style.display = "none";
+
+      // Показать кнопку, когда Mindar готов
+      sceneEl.addEventListener("arReady", () => {
+        playAudioButton.style.display = "block";
+        text.style.display = "block";
+      });
+
       document.addEventListener("DOMContentLoaded", function () {
         const overlay = document.getElementById("overlay");
-        const playAudioButton = document.getElementById("playAudioButton");
-        let audioContext;
-        let audioBuffers = {};
+        let audioContext; // Для управления звуком
+        let audioBuffers = {}; // Кэш звуковых данных
         const targetAudioMap = {
           0: "assets/sound/01_coral.mp3",
           1: "assets/sound/02_cypress_cone.mp3",
@@ -114,34 +214,29 @@
           9: "assets/sound/09_rose.mp3",
         };
 
+        // Активация звука
         playAudioButton.addEventListener("click", async function () {
           overlay.style.display = "none";
-          audioContext = new (window.AudioContext ||
-            window.webkitAudioContext)();
-          await loadSound("assets/sound/activate.mp3");
+          if (!audioContext) {
+            audioContext = new (window.AudioContext ||
+              window.webkitAudioContext)();
+          }
+          await loadSound("assets/sound/activate.mp3"); // Короткий звук активации
           playSound("assets/sound/activate.mp3");
         });
 
+        // Функция для загрузки звуковых файлов
         async function loadSound(url) {
-          try {
+          if (!audioBuffers[url]) {
             const response = await fetch(url);
             const arrayBuffer = await response.arrayBuffer();
             audioBuffers[url] = await audioContext.decodeAudioData(arrayBuffer);
-          } catch (error) {
-            console.error("Error loading audio file:", error);
           }
         }
 
-        function playSound(
-          url,
-          loop = false,
-          fadeInDuration = 5000,
-          fadeOutDuration = 5000
-        ) {
-          if (!audioBuffers[url]) {
-            console.error("Audio buffer not loaded:", url);
-            return;
-          }
+        // Функция для воспроизведения звука
+        function playSound(url, loop = false) {
+          if (!audioBuffers[url]) return;
           const source = audioContext.createBufferSource();
           source.buffer = audioBuffers[url];
           source.loop = loop;
@@ -152,28 +247,20 @@
           gainNode.gain.setValueAtTime(0, audioContext.currentTime);
           gainNode.gain.linearRampToValueAtTime(
             1,
-            audioContext.currentTime + fadeInDuration / 1000
-          );
+            audioContext.currentTime + 0.5
+          ); // Плавное нарастание звука
 
           source.start();
-
-          source.stop = function () {
-            gainNode.gain.linearRampToValueAtTime(
-              0,
-              audioContext.currentTime + fadeOutDuration / 1000
-            );
-            setTimeout(() => {
-              source.stop(0);
-              source.disconnect();
-              gainNode.disconnect();
-            }, fadeOutDuration);
+          source.onended = () => {
+            source.disconnect();
+            gainNode.disconnect();
           };
 
           return source;
         }
 
-        const sceneEl = document.querySelector("a-scene");
-        let activeSources = {};
+        // Управление звуком для каждой цели
+        const activeSources = {}; // Хранение воспроизводимых источников звука
 
         Object.keys(targetAudioMap).forEach((index) => {
           const targetEntity = sceneEl.querySelector(
@@ -199,13 +286,16 @@
           }
         });
 
+        // Остановка всех звуков при отсутствии целей
         sceneEl.addEventListener("nomatch", () => {
           Object.values(activeSources).forEach((source) => {
             if (source) {
               source.stop();
             }
           });
-          activeSources = {};
+          Object.keys(activeSources).forEach(
+            (key) => delete activeSources[key]
+          );
         });
       });
     </script>
