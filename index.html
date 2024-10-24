@@ -185,7 +185,6 @@
     <script>
       const sceneEl = document.getElementById("scene");
       const playAudioButton = document.getElementById("playAudioButton");
-      const text = document.getElementById("text");
 
       // Скрыть кнопку изначально
       playAudioButton.style.display = "none";
@@ -199,6 +198,7 @@
 
       document.addEventListener("DOMContentLoaded", function () {
         const overlay = document.getElementById("overlay");
+        const playAudioButton = document.getElementById("playAudioButton");
         let audioContext; // Для управления звуком
         let audioBuffers = {}; // Кэш звуковых данных
         const targetAudioMap = {
@@ -217,49 +217,60 @@
         // Активация звука
         playAudioButton.addEventListener("click", async function () {
           overlay.style.display = "none";
-          if (!audioContext) {
-            audioContext = new (window.AudioContext ||
-              window.webkitAudioContext)();
-          }
+          audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
           await loadSound("assets/sound/activate.mp3"); // Короткий звук активации
-          playSound("assets/sound/activate.mp3");
+          playSound("activate.mp3");
         });
 
         // Функция для загрузки звуковых файлов
         async function loadSound(url) {
-          if (!audioBuffers[url]) {
-            const response = await fetch(url);
-            const arrayBuffer = await response.arrayBuffer();
-            audioBuffers[url] = await audioContext.decodeAudioData(arrayBuffer);
-          }
+          const response = await fetch(url);
+          const arrayBuffer = await response.arrayBuffer();
+          audioBuffers[url] = await audioContext.decodeAudioData(arrayBuffer);
         }
 
         // Функция для воспроизведения звука
-        function playSound(url, loop = false) {
-          if (!audioBuffers[url]) return;
+        function playSound(
+          url,
+          loop = false,
+          fadeInDuration = 5000,
+          fadeOutDuration = 5000
+        ) {
           const source = audioContext.createBufferSource();
           source.buffer = audioBuffers[url];
           source.loop = loop;
 
+          // Применение плавного затухания/нарастания
           const gainNode = audioContext.createGain();
           source.connect(gainNode);
           gainNode.connect(audioContext.destination);
           gainNode.gain.setValueAtTime(0, audioContext.currentTime);
           gainNode.gain.linearRampToValueAtTime(
             1,
-            audioContext.currentTime + 0.5
-          ); // Плавное нарастание звука
+            audioContext.currentTime + fadeInDuration / 1000
+          );
 
           source.start();
-          source.onended = () => {
-            source.disconnect();
-            gainNode.disconnect();
+
+          // Остановка и плавное затухание звука
+          source.stop = function () {
+            gainNode.gain.linearRampToValueAtTime(
+              0,
+              audioContext.currentTime + fadeOutDuration / 1000
+            );
+            setTimeout(() => {
+              source.stop();
+              source.disconnect();
+              gainNode.disconnect();
+            }, fadeOutDuration);
           };
 
           return source;
         }
 
         // Управление звуком для каждой цели
+        const sceneEl = document.querySelector("a-scene");
         const activeSources = {}; // Хранение воспроизводимых источников звука
 
         Object.keys(targetAudioMap).forEach((index) => {
@@ -293,9 +304,7 @@
               source.stop();
             }
           });
-          Object.keys(activeSources).forEach(
-            (key) => delete activeSources[key]
-          );
+          activeSources = {};
         });
       });
     </script>
