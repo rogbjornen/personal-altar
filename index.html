@@ -5,7 +5,6 @@
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
     <style>
-      /* Стили для заглушки */
       #overlay {
         position: fixed;
         top: 0;
@@ -72,7 +71,7 @@
       id="scene"
       mindar-image="imageTargetSrc: assets/targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 10; missTolerance: 10; maxTrack: 8"
       color-space="sRGB"
-      renderer="colorManagement: true, physicallyCorrectLights"
+      renderer="colorManagement: true"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
     >
@@ -88,7 +87,7 @@
       <a-entity mindar-image-target="targetIndex: 8">
         <a-entity
           gltf-model="#swallowModel"
-          scale="1 1 1"
+          scale="0.5 0.5 0.5"
           position="0 0 0"
           rotation="0 180 0"
         >
@@ -97,24 +96,11 @@
     </a-scene>
 
     <script>
-      const sceneEl = document.getElementById("scene");
-      const playAudioButton = document.getElementById("playAudioButton");
-
-      // Скрыть кнопку изначально
-      playAudioButton.style.display = "none";
-      text.style.display = "none";
-
-      // Показать кнопку, когда Mindar готов
-      sceneEl.addEventListener("arReady", () => {
-        playAudioButton.style.display = "block";
-        text.style.display = "block";
-      });
-
       document.addEventListener("DOMContentLoaded", function () {
         const overlay = document.getElementById("overlay");
         const playAudioButton = document.getElementById("playAudioButton");
-        let audioContext; // Для управления звуком
-        let audioBuffers = {}; // Кэш звуковых данных
+        let audioContext;
+        let audioBuffers = {};
         const targetAudioMap = {
           0: "assets/sound/01_coral.mp3",
           1: "assets/sound/02_cypress_cone.mp3",
@@ -128,34 +114,38 @@
           9: "assets/sound/09_rose.mp3",
         };
 
-        // Активация звука
         playAudioButton.addEventListener("click", async function () {
           overlay.style.display = "none";
           audioContext = new (window.AudioContext ||
             window.webkitAudioContext)();
-          await loadSound("assets/sound/activate.mp3"); // Короткий звук активации
-          playSound("activate.mp3");
+          await loadSound("assets/sound/activate.mp3");
+          playSound("assets/sound/activate.mp3");
         });
 
-        // Функция для загрузки звуковых файлов
         async function loadSound(url) {
-          const response = await fetch(url);
-          const arrayBuffer = await response.arrayBuffer();
-          audioBuffers[url] = await audioContext.decodeAudioData(arrayBuffer);
+          try {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            audioBuffers[url] = await audioContext.decodeAudioData(arrayBuffer);
+          } catch (error) {
+            console.error("Error loading audio file:", error);
+          }
         }
 
-        // Функция для воспроизведения звука
         function playSound(
           url,
           loop = false,
           fadeInDuration = 5000,
           fadeOutDuration = 5000
         ) {
+          if (!audioBuffers[url]) {
+            console.error("Audio buffer not loaded:", url);
+            return;
+          }
           const source = audioContext.createBufferSource();
           source.buffer = audioBuffers[url];
           source.loop = loop;
 
-          // Применение плавного затухания/нарастания
           const gainNode = audioContext.createGain();
           source.connect(gainNode);
           gainNode.connect(audioContext.destination);
@@ -167,14 +157,13 @@
 
           source.start();
 
-          // Остановка и плавное затухание звука
           source.stop = function () {
             gainNode.gain.linearRampToValueAtTime(
               0,
               audioContext.currentTime + fadeOutDuration / 1000
             );
             setTimeout(() => {
-              source.stop();
+              source.stop(0);
               source.disconnect();
               gainNode.disconnect();
             }, fadeOutDuration);
@@ -183,9 +172,8 @@
           return source;
         }
 
-        // Управление звуком для каждой цели
         const sceneEl = document.querySelector("a-scene");
-        const activeSources = {}; // Хранение воспроизводимых источников звука
+        let activeSources = {};
 
         Object.keys(targetAudioMap).forEach((index) => {
           const targetEntity = sceneEl.querySelector(
@@ -211,7 +199,6 @@
           }
         });
 
-        // Остановка всех звуков при отсутствии целей
         sceneEl.addEventListener("nomatch", () => {
           Object.values(activeSources).forEach((source) => {
             if (source) {
